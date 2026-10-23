@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#263257" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Chess Pals" />
+    <meta name="description" content="Real chess with friendly pieces, for a grown-up and a kid on one phone. A Pocket Giggles game." />
+    <title>Chess Pals</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icon-180.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" />
+    <link rel="stylesheet" href="css/pieces.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- Title -->
+      <section class="screen screen--title" id="scr-title">
+        <button class="corner-btn corner-btn--sound" type="button" data-sound aria-label="Sound on">🔊</button>
+        <div class="title-art" id="titleArt" aria-hidden="true"></div>
+        <h1 class="logo"><span>CHESS</span><span>PALS</span></h1>
+        <p class="tagline">Real chess. Friendly pieces.</p>
+        <div class="title-buttons">
+          <button class="big-btn big-btn--go" id="btnContinue" type="button" hidden>KEEP PLAYING ▶</button>
+          <button class="big-btn" id="btnFriend" type="button"><b>👫</b> PLAY A PAL</button>
+          <button class="big-btn big-btn--pink" id="btnCpu" type="button"><b>🤖</b> PLAY THE COMPUTER</button>
+          <button class="link-btn" id="btnHowTo" type="button">📖 How the pieces move</button>
+        </div>
+        <div class="scoreboard" id="scoreboard" aria-label="Wins"></div>
+      </section>
+
+      <!-- Set up a game with two players on one phone -->
+      <section class="screen screen--setup" id="scr-friend" hidden>
+        <header class="setup-top">
+          <button class="back-btn" type="button" data-home>◀</button>
+          <h2 class="screen-head">PLAY A PAL</h2>
+          <span class="back-btn back-btn--ghost" aria-hidden="true"></span>
+        </header>
+        <div class="setup-scroll">
+          <div class="player-card" data-player="a"></div>
+          <div class="vs-row">
+            <button class="chip-btn" id="btnSwap" type="button">⇅ Swap colors</button>
+            <button class="chip-btn" id="btnCoin" type="button">🎲 Pick for us</button>
+          </div>
+          <div class="player-card" data-player="b"></div>
+
+          <h3 class="setup-label">How are you sitting?</h3>
+          <div class="seg" id="segSeating" role="radiogroup" aria-label="Seating">
+            <button type="button" role="radio" data-v="side"><b>🧍🧍</b>Side by side</button>
+            <button type="button" role="radio" data-v="across"><b>🧍↕🧍</b>Across the table</button>
+            <button type="button" role="radio" data-v="flip"><b>🔄</b>Pass the phone</button>
+          </div>
+
+          <h3 class="setup-label">Board</h3>
+          <div class="themes" data-themes></div>
+        </div>
+        <button class="big-btn big-btn--go" id="btnStartFriend" type="button">PLAY!</button>
+      </section>
+
+      <!-- Set up a game against the computer -->
+      <section class="screen screen--setup" id="scr-cpu" hidden>
+        <header class="setup-top">
+          <button class="back-btn" type="button" data-home>◀</button>
+          <h2 class="screen-head">PLAY THE COMPUTER</h2>
+          <span class="back-btn back-btn--ghost" aria-hidden="true"></span>
+        </header>
+        <div class="setup-scroll">
+          <h3 class="setup-label">Who's playing?</h3>
+          <div class="who" id="cpuWho"></div>
+          <div class="help-row" id="cpuHelp"></div>
+
+          <h3 class="setup-label">Pick a buddy to play</h3>
+          <div class="buddies" id="buddies"></div>
+
+          <h3 class="setup-label">Your pieces</h3>
+          <div class="seg" id="segColor" role="radiogroup" aria-label="Your color">
+            <button type="button" role="radio" data-v="w"><b class="swatch swatch--w"></b>White<small>goes first</small></button>
+            <button type="button" role="radio" data-v="b"><b class="swatch swatch--b"></b>Black</button>
+            <button type="button" role="radio" data-v="r"><b>🎲</b>Surprise me</button>
+          </div>
+
+          <h3 class="setup-label">Board</h3>
+          <div class="themes" data-themes></div>
+        </div>
+        <button class="big-btn big-btn--go" id="btnStartCpu" type="button">PLAY!</button>
+      </section>
+
+      <!-- The game -->
+      <section class="screen screen--game" id="scr-game" hidden>
+        <div class="bar bar--top" id="barTop"></div>
+        <div class="board-area">
+          <div class="board-wrap" id="boardWrap">
+            <div class="board" id="board" aria-label="Chess board"></div>
+            <div class="pieces" id="pieces"></div>
+            <div class="drag-ghost" id="dragGhost" hidden></div>
+          </div>
+        </div>
+        <div class="bar bar--bottom" id="barBottom"></div>
+        <div class="game-actions">
+          <button class="act-btn" id="btnUndo" type="button"><b>↩️</b>Oops!</button>
+          <button class="act-btn" id="btnHint" type="button"><b>💡</b>Hint</button>
+          <button class="act-btn" id="btnMenu" type="button"><b>☰</b>Menu</button>
+        </div>
+        <div class="tip" id="tip" aria-live="polite"></div>
+      </section>
+    </div>
+
+    <!-- Pick a piece for a pawn that reached the end -->
+    <div class="modal" id="mdPromo" hidden>
+      <div class="sheet sheet--promo" id="promoSheet">
+        <h2>Your pawn made it! 🎉</h2>
+        <p>Pick what it turns into:</p>
+        <div class="promo-grid" id="promoGrid"></div>
+      </div>
+    </div>
+
+    <!-- Game over -->
+    <div class="modal" id="mdEnd" hidden>
+      <div class="sheet sheet--end">
+        <div class="end-hero" id="endHero"></div>
+        <h2 id="endTitle"></h2>
+        <p id="endText"></p>
+        <div class="sheet-buttons">
+          <button class="big-btn big-btn--go" id="btnAgain" type="button">PLAY AGAIN</button>
+          <button class="chip-btn" id="btnSeeBoard" type="button">👀 Look at the board</button>
+          <button class="chip-btn" id="btnEndHome" type="button">🏠 Home</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menu during a game -->
+    <div class="modal" id="mdMenu" hidden>
+      <div class="sheet">
+        <h2>Menu</h2>
+        <div class="menu-list">
+          <button class="menu-item" id="mnHowTo" type="button">📖 How the pieces move</button>
+          <button class="menu-item" id="mnMoves" type="button">📝 Moves so far</button>
+          <div class="moves" id="movesList" hidden></div>
+          <button class="menu-item" id="mnDraw" type="button">🤝 Call it a tie</button>
+          <button class="menu-item" id="mnResign" type="button">🏳️ Give up this game</button>
+          <button class="menu-item" id="mnSound" type="button" data-sound>🔊 Sound on</button>
+          <div class="menu-item menu-item--themes"><span>🎨 Board</span><div class="themes themes--small" data-themes></div></div>
+          <button class="menu-item" id="mnHome" type="button">🏠 Home (saves the game)</button>
+        </div>
+        <button class="big-btn" id="mnClose" type="button">BACK TO GAME</button>
+      </div>
+    </div>
+
+    <!-- Are you sure? -->
+    <div class="modal" id="mdConfirm" hidden>
+      <div class="sheet sheet--small">
+        <h2 id="cfTitle"></h2>
+        <p id="cfText"></p>
+        <div class="sheet-buttons sheet-buttons--row">
+          <button class="chip-btn" id="cfNo" type="button">No</button>
+          <button class="big-btn big-btn--go big-btn--small" id="cfYes" type="button">Yes</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- How to play -->
+    <div class="modal" id="mdHelp" hidden>
+      <div class="sheet sheet--tall">
+        <h2>How the pieces move</h2>
+        <div class="help" id="helpBody"></div>
+        <button class="big-btn" id="helpClose" type="button">GOT IT!</button>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+    <script src="js/chess.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/pieces.js"></script>
+    <script src="js/sound.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/board.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+      if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js');
+    </script>
+  </body>
+</html>

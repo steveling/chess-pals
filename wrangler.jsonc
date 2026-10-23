@@ -1,0 +1,8 @@
+// Cloudflare Worker that serves the game at https://chess.pocketgiggles.com.
+// Static files only, served straight from the repo root; .assetsignore keeps the rest private.
+{
+  "name": "chess-pals",
+  "compatibility_date": "2026-10-01",
+  "assets": { "directory": "." },
+  "previews": {}
+}

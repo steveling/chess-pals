@@ -1,0 +1,13 @@
+{
+  "name": "Chess Pals",
+  "short_name": "Chess Pals",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#263257",
+  "theme_color": "#263257",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
